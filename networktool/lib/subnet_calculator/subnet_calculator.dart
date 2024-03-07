@@ -166,48 +166,48 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                   children: [
                     SubnetPresetButton(label: "192", onPressed: () {
                       setState(() {
-                        octetOne = 192;
-                        octetTwo = 168;
-                        octetThree = 0;
-                        octetFour = 0;
-                        mask = 24;
+                        if (!octetOneLocked)octetOne = 192;
+                        if (!octetTwoLocked)octetTwo = 168;
+                        if (!octetThreeLocked)octetThree = 0;
+                        if (!octetFourLocked)octetFour = 0;
+                        if (false)mask = 24;
                       });
                     }),
                     SubnetPresetButton(label: "172", onPressed: () {
                       setState(() {
-                        octetOne = 172;
-                        octetTwo = 16;
-                        octetThree = 0;
-                        octetFour = 0;
-                        mask = 16;
+                        if (!octetOneLocked)octetOne = 172;
+                        if (!octetTwoLocked)octetTwo = 16;
+                        if (!octetThreeLocked)octetThree = 0;
+                        if (!octetFourLocked)octetFour = 0;
+                        if (false)mask = 16;
                       });
                     }),
                     SubnetPresetButton(label: "10", onPressed: () {
                       setState(() {
-                        octetOne = 10;
-                        octetTwo = 0;
-                        octetThree = 0;
-                        octetFour = 0;
-                        mask = 8;
+                        if (!octetOneLocked)octetOne = 10;
+                        if (!octetTwoLocked)octetTwo = 0;
+                        if (!octetThreeLocked)octetThree = 0;
+                        if (!octetFourLocked)octetFour = 0;
+                        if (false)mask = 8;
                       });
                     }),
                     SubnetPresetButton(label: "?", onPressed: () {
                       setState(() {
                         var random = Random();
-                        octetOne = random.nextInt(256) as double;
-                        octetTwo = random.nextInt(256) as double;
-                        octetThree = random.nextInt(256) as double;
-                        octetFour = random.nextInt(256) as double;
-                        mask = random.nextInt(33) as double;
+                        if (!octetOneLocked) octetOne = random.nextInt(256) as double;
+                        if (!octetTwoLocked) octetTwo = random.nextInt(256) as double;
+                        if (!octetThreeLocked) octetThree = random.nextInt(256) as double;
+                        if (!octetFourLocked) octetFour = random.nextInt(256) as double;
+                        if (false) mask = random.nextInt(33) as double;
                       });
                     }),
                     SubnetPresetButton(label: "0", onPressed: () {
                       setState(() {
-                        octetOne = 0;
-                        octetTwo = 0;
-                        octetThree = 0;
-                        octetFour = 0;
-                        mask = 0;
+                        if (!octetOneLocked) octetOne = 0;
+                        if (!octetTwoLocked) octetTwo = 0;
+                        if (!octetThreeLocked) octetThree = 0;
+                        if (!octetFourLocked) octetFour = 0;
+                        if (false) mask = 0;
                       });
                     }),          
                   ],
@@ -218,60 +218,59 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                       setState(() {
                         String randomIP = generateRandomIP('A');
                         List<int> ipParts = randomIP.split('.').map(int.parse).toList();
-                        octetOne = ipParts[0] as double;
-                        octetTwo = ipParts[1] as double;
-                        octetThree = ipParts[2] as double;
-                        octetFour = ipParts[3] as double;
-                        mask = 0;
+                        if (!octetOneLocked)octetOne = ipParts[0] as double;
+                        if (!octetTwoLocked)octetTwo = ipParts[1] as double;
+                        if (!octetThreeLocked)octetThree = ipParts[2] as double;
+                        if (!octetFourLocked)octetFour = ipParts[3] as double;
+                        if (false) mask = 0;
                       });
                     }),
                     SubnetPresetButton(label: "B", onPressed: () {
                       setState(() {
                         String randomIP = generateRandomIP('B');
                         List<int> ipParts = randomIP.split('.').map(int.parse).toList();
-                        octetOne = ipParts[0] as double;
-                        octetTwo = ipParts[1] as double;
-                        octetThree = ipParts[2] as double;
-                        octetFour = ipParts[3] as double;
-                        mask = 0;
+                        if (!octetOneLocked)octetOne = ipParts[0] as double;
+                        if (!octetTwoLocked)octetTwo = ipParts[1] as double;
+                        if (!octetThreeLocked)octetThree = ipParts[2] as double;
+                        if (!octetFourLocked)octetFour = ipParts[3] as double;
+                        if (false) mask = 0;
                       });
                     }),
                     SubnetPresetButton(label: "C", onPressed: () {
                       setState(() {
                         String randomIP = generateRandomIP('C');
                         List<int> ipParts = randomIP.split('.').map(int.parse).toList();
-                        octetOne = ipParts[0] as double;
-                        octetTwo = ipParts[1] as double;
-                        octetThree = ipParts[2] as double;
-                        octetFour = ipParts[3] as double;
-                        mask = 0;
+                        if (!octetOneLocked)octetOne = ipParts[0] as double;
+                        if (!octetTwoLocked)octetTwo = ipParts[1] as double;
+                        if (!octetThreeLocked)octetThree = ipParts[2] as double;
+                        if (!octetFourLocked)octetFour = ipParts[3] as double;
+                        if (false) mask = 0;
                       });
                     }),
                     SubnetPresetButton(label: "D", onPressed: () {
                       setState(() {
                         String randomIP = generateRandomIP('D');
                         List<int> ipParts = randomIP.split('.').map(int.parse).toList();
-                        octetOne = ipParts[0] as double;
-                        octetTwo = ipParts[1] as double;
-                        octetThree = ipParts[2] as double;
-                        octetFour = ipParts[3] as double;
-                        mask = 0;
+                        if (!octetOneLocked)octetOne = ipParts[0] as double;
+                        if (!octetTwoLocked)octetTwo = ipParts[1] as double;
+                        if (!octetThreeLocked)octetThree = ipParts[2] as double;
+                        if (!octetFourLocked)octetFour = ipParts[3] as double;
+                        if (false) mask = 0;
                       });
                     }),
                     SubnetPresetButton(label: "E", onPressed: () {
                       setState(() {
                         String randomIP = generateRandomIP('E');
                         List<int> ipParts = randomIP.split('.').map(int.parse).toList();
-                        octetOne = ipParts[0] as double;
-                        octetTwo = ipParts[1] as double;
-                        octetThree = ipParts[2] as double;
-                        octetFour = ipParts[3] as double;
-                        mask = 0;
+                        if (!octetOneLocked)octetOne = ipParts[0] as double;
+                        if (!octetTwoLocked)octetTwo = ipParts[1] as double;
+                        if (!octetThreeLocked)octetThree = ipParts[2] as double;
+                        if (!octetFourLocked)octetFour = ipParts[3] as double;
+                        if (false) mask = 0;
                       });
                     }),
                   ],
                 ),
-     
               ],
             ),
           ],
