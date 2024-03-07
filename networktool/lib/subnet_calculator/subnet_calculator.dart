@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../globals.dart';
@@ -19,12 +17,13 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
   double octetTwo = 0;
   double octetThree = 0;
   double octetFour = 0;
-  double mask = 8;
+  double mask = 0;
 
   bool octetOneLocked = false;
   bool octetTwoLocked = false;
   bool octetThreeLocked = false;
   bool octetFourLocked = false;
+  bool maskLocked = false;
 
   String generateRandomIP(String ipClass) {  
     Map<String, List<int>> classRanges = {
@@ -65,6 +64,9 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
           break;
         case "oct 4":
           octetFourLocked = !octetFourLocked;
+          break;
+        case "mask":
+          maskLocked = !maskLocked;
           break;
       }
     });
@@ -151,9 +153,13 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetFourLocked) octetFour = value;
                       });
                     }),
-                    buildSlider(mask, true, "mask", () {}, (value) {
+                    buildSlider(mask, maskLocked, "mask", () {
                       setState(() {
-                        mask = value;
+                        maskLocked = !maskLocked;
+                      });
+                    }, (value) {
+                      setState(() {
+                       if (!maskLocked) mask = value;
                       });
                     }),
                   ],
@@ -170,7 +176,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked)octetTwo = 168;
                         if (!octetThreeLocked)octetThree = 0;
                         if (!octetFourLocked)octetFour = 0;
-                        if (false)mask = 24;
+                        if (!maskLocked) mask = 24;
                       });
                     }),
                     SubnetPresetButton(label: "172", onPressed: () {
@@ -179,7 +185,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked)octetTwo = 16;
                         if (!octetThreeLocked)octetThree = 0;
                         if (!octetFourLocked)octetFour = 0;
-                        if (false)mask = 16;
+                        if (!maskLocked) mask = 16;
                       });
                     }),
                     SubnetPresetButton(label: "10", onPressed: () {
@@ -188,7 +194,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked)octetTwo = 0;
                         if (!octetThreeLocked)octetThree = 0;
                         if (!octetFourLocked)octetFour = 0;
-                        if (false)mask = 8;
+                        if (!maskLocked) mask = 8;
                       });
                     }),
                     SubnetPresetButton(label: "?", onPressed: () {
@@ -198,7 +204,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked) octetTwo = random.nextInt(256) as double;
                         if (!octetThreeLocked) octetThree = random.nextInt(256) as double;
                         if (!octetFourLocked) octetFour = random.nextInt(256) as double;
-                        if (false) mask = random.nextInt(33) as double;
+                        if (!maskLocked) mask = random.nextInt(33) as double;
                       });
                     }),
                     SubnetPresetButton(label: "0", onPressed: () {
@@ -207,7 +213,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked) octetTwo = 0;
                         if (!octetThreeLocked) octetThree = 0;
                         if (!octetFourLocked) octetFour = 0;
-                        if (false) mask = 0;
+                        if (!maskLocked) mask = 0;
                       });
                     }),          
                   ],
@@ -222,7 +228,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked)octetTwo = ipParts[1] as double;
                         if (!octetThreeLocked)octetThree = ipParts[2] as double;
                         if (!octetFourLocked)octetFour = ipParts[3] as double;
-                        if (false) mask = 0;
+                        if (!maskLocked) mask = 0;
                       });
                     }),
                     SubnetPresetButton(label: "B", onPressed: () {
@@ -233,7 +239,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked)octetTwo = ipParts[1] as double;
                         if (!octetThreeLocked)octetThree = ipParts[2] as double;
                         if (!octetFourLocked)octetFour = ipParts[3] as double;
-                        if (false) mask = 0;
+                        if (!maskLocked) mask = 0;
                       });
                     }),
                     SubnetPresetButton(label: "C", onPressed: () {
@@ -244,7 +250,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked)octetTwo = ipParts[1] as double;
                         if (!octetThreeLocked)octetThree = ipParts[2] as double;
                         if (!octetFourLocked)octetFour = ipParts[3] as double;
-                        if (false) mask = 0;
+                        if (!maskLocked) mask = 0;
                       });
                     }),
                     SubnetPresetButton(label: "D", onPressed: () {
@@ -255,7 +261,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked)octetTwo = ipParts[1] as double;
                         if (!octetThreeLocked)octetThree = ipParts[2] as double;
                         if (!octetFourLocked)octetFour = ipParts[3] as double;
-                        if (false) mask = 0;
+                        if (!maskLocked) mask = 0;
                       });
                     }),
                     SubnetPresetButton(label: "E", onPressed: () {
@@ -266,7 +272,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked)octetTwo = ipParts[1] as double;
                         if (!octetThreeLocked)octetThree = ipParts[2] as double;
                         if (!octetFourLocked)octetFour = ipParts[3] as double;
-                        if (false) mask = 0;
+                        if (!maskLocked) mask = 0;
                       });
                     }),
                   ],
@@ -322,7 +328,9 @@ Widget buildSlider(
           onLock();
         }, 
         icon: Icon(
-          octetlock ? Icons.lock : Icons.lock_open
+          octetlock ? Icons.lock : Icons.lock_open,
+          color: Colors.grey,
+          size: 16,
         )
       )
     ],
