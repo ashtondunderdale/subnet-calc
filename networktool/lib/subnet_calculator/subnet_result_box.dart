@@ -38,7 +38,6 @@ class SubnetResultBox extends StatelessWidget {
                                                       'Invalid IP Address';
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(

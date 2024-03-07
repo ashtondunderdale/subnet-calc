@@ -89,6 +89,11 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
     });
   }
 
+  String getIpAddressInBinary() {
+    final ipParts = ("$octetOne.$octetTwo.$octetThree.$octetFour").split('.');
+    return ipParts.map((part) => int.parse(part).toRadixString(2).padLeft(8, '0')).join('.');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -97,43 +102,60 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
         Padding(
           padding: const EdgeInsets.only(top: 16, left: 16),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 500,
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "$octetOne.$octetTwo.$octetThree.$octetFour",
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "$octetOne.$octetTwo.$octetThree.$octetFour",
+                            style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2
+                          ),
+                        ),
+                        TextSpan(
+                          text: "/$mask",
                           style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2
+                            color: Color.fromARGB(255, 123, 123, 123),
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2
+                          )
+                        )
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 220),
+                        child: Text(
+                          getIpAddressInBinary(),
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14
+                          ),
                         ),
                       ),
-                      TextSpan(
-                        text: "/$mask",
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 123, 123, 123),
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2
-                        )
-                      )
+                      Padding(
+                        padding: const EdgeInsets.only(left: 24),
+                        child: Text(
+                          "Your IP Address is: $yourIPAddress",
+                          style: const TextStyle(
+                            color: Colors.grey
+                          ),
+                        ),
+                      ),
                     ],
-                  ),
-                ),
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20, left: 24),
-                child: Text(
-                  "Your IP Address is: $yourIPAddress",
-                  style: const TextStyle(
-                    color: Colors.grey
-                  ),
-                ),
-              )
             ],
           ),
         ),
