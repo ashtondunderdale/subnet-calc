@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+import '../api.dart';
 import '../globals.dart';
 import 'subnet_preset_button.dart';
 import 'subnet_result_box.dart';
@@ -13,6 +14,22 @@ class SubnetCalculator extends StatefulWidget {
 }
 
 class _SubnetCalculatorState extends State<SubnetCalculator> {
+
+  @override
+  void initState() {
+    super.initState();
+    getIpAddress();
+  }
+
+  Future getIpAddress() async {
+    yourIPAddress = await API.getIPAddress();
+    setState(() {});
+
+    API.testInternetSpeed();
+  }
+
+  late String? yourIPAddress = "";
+
   double octetOne = 0;
   double octetTwo = 0;
   double octetThree = 0;
@@ -79,29 +96,45 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 16, left: 16),
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: "$octetOne.$octetTwo.$octetThree.$octetFour",
-                    style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2
+          child: Row(
+            children: [
+              SizedBox(
+                width: 500,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "$octetOne.$octetTwo.$octetThree.$octetFour",
+                          style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2
+                        ),
+                      ),
+                      TextSpan(
+                        text: "/$mask",
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 123, 123, 123),
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2
+                        )
+                      )
+                    ],
                   ),
                 ),
-                TextSpan(
-                  text: "/$mask",
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20, left: 24),
+                child: Text(
+                  "Your IP Address is: $yourIPAddress",
                   style: const TextStyle(
-                    color: Color.fromARGB(255, 123, 123, 123),
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2
-                  )
-                )
-              ],
-            ),
+                    color: Colors.grey
+                  ),
+                ),
+              )
+            ],
           ),
         ),
         Row(
@@ -126,6 +159,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetOneLocked) octetOne = value;
                       });
                     }),
+
                     buildSlider(octetTwo, octetTwoLocked, "oct 2", () {
                       setState(() {
                         octetTwoLocked = !octetTwoLocked;
@@ -135,6 +169,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetTwoLocked) octetTwo = value;
                       });
                     }),
+
                     buildSlider(octetThree, octetThreeLocked, "oct 3", () {
                       setState(() {
                         octetThreeLocked = !octetThreeLocked;
@@ -144,6 +179,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetThreeLocked) octetThree = value;
                       });
                     }),
+
                     buildSlider(octetFour, octetFourLocked, "oct 4", () {
                       setState(() {
                         octetFourLocked = !octetFourLocked;
@@ -153,6 +189,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!octetFourLocked) octetFour = value;
                       });
                     }),
+
                     buildSlider(mask, maskLocked, "mask", () {
                       setState(() {
                         maskLocked = !maskLocked;
@@ -179,6 +216,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!maskLocked) mask = 24;
                       });
                     }),
+
                     SubnetPresetButton(label: "172", onPressed: () {
                       setState(() {
                         if (!octetOneLocked)octetOne = 172;
@@ -188,6 +226,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!maskLocked) mask = 16;
                       });
                     }),
+
                     SubnetPresetButton(label: "10", onPressed: () {
                       setState(() {
                         if (!octetOneLocked)octetOne = 10;
@@ -197,6 +236,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!maskLocked) mask = 8;
                       });
                     }),
+
                     SubnetPresetButton(label: "?", onPressed: () {
                       setState(() {
                         var random = Random();
@@ -207,6 +247,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!maskLocked) mask = random.nextInt(33) as double;
                       });
                     }),
+
                     SubnetPresetButton(label: "0", onPressed: () {
                       setState(() {
                         if (!octetOneLocked) octetOne = 0;
@@ -231,6 +272,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!maskLocked) mask = 0;
                       });
                     }),
+
                     SubnetPresetButton(label: "B", onPressed: () {
                       setState(() {
                         String randomIP = generateRandomIP('B');
@@ -242,6 +284,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!maskLocked) mask = 0;
                       });
                     }),
+
                     SubnetPresetButton(label: "C", onPressed: () {
                       setState(() {
                         String randomIP = generateRandomIP('C');
@@ -253,6 +296,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!maskLocked) mask = 0;
                       });
                     }),
+
                     SubnetPresetButton(label: "D", onPressed: () {
                       setState(() {
                         String randomIP = generateRandomIP('D');
@@ -264,6 +308,7 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                         if (!maskLocked) mask = 0;
                       });
                     }),
+
                     SubnetPresetButton(label: "E", onPressed: () {
                       setState(() {
                         String randomIP = generateRandomIP('E');
