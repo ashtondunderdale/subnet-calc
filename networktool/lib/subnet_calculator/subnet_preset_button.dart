@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../globals.dart';
-
 class SubnetPresetButton extends StatelessWidget {
   const SubnetPresetButton({super.key, required this.onPressed, required this.label});
 
@@ -11,7 +9,7 @@ class SubnetPresetButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5, bottom: 5),
+      padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 5),
       child: FloatingActionButton(
         backgroundColor: Colors.white,
         mini: true,

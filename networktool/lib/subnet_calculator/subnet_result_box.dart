@@ -13,32 +13,30 @@ class SubnetResultBox extends StatelessWidget {
   final double octetFour;
   final double mask;
 
-  String calculateSubnetMask(int mask) {
-    List<int> subnetMaskOctets = [];
-      
-    for (int i = 0; i < 4; i++) {
+  String calculateWildcardMask(int mask) {
+    return List.generate(4, (i) {
       int onesInOctet = mask >= 8 ? 8 : mask;
-      
       int octetValue = (1 << (8 - onesInOctet)) - 1;
-      subnetMaskOctets.add(octetValue);
-
-      mask -= onesInOctet;
-    }
       
-    return subnetMaskOctets.join('.');
+      mask -= onesInOctet;
+      
+      return octetValue;
+    }).join('.');
   }
-    
-  String identifyIPClass(String ipAddress) {
-    int firstOctet = int.parse(ipAddress.split('.')[0]);
+  
+String identifyIPClass(String ipAddress) {
+  int firstOctet = int.parse(ipAddress.split('.')[0]);
 
-    return (firstOctet >= 1 && firstOctet <= 126) ? 'Class A' :
-          (firstOctet == 127) ? 'Loopback' :
-          (firstOctet >= 128 && firstOctet <= 191) ? 'Class B' :
-          (firstOctet >= 192 && firstOctet <= 223) ? 'Class C' :
-          (firstOctet >= 224 && firstOctet <= 239) ? 'Class D' :
-          (firstOctet >= 240 && firstOctet <= 255) ? 'Class E' :
-          'Invalid IP Address';
-  }
+  if (firstOctet == 0) return 'default route';
+
+  return (firstOctet >= 1 && firstOctet <= 126)   ? 'Class A' :
+         (firstOctet == 127)                      ? 'Loopback address' :
+         (firstOctet >= 128 && firstOctet <= 191) ? 'Class B' :
+         (firstOctet >= 192 && firstOctet <= 223) ? 'Class C' :
+         (firstOctet >= 224 && firstOctet <= 239) ? 'Class D (multicast)' :
+         (firstOctet >= 240 && firstOctet <= 255) ? 'Class E (experimental)' :
+         'Invalid IP Address';
+}
 
 
   @override
@@ -47,19 +45,22 @@ class SubnetResultBox extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16),
       child: Container(
         width: 600,
-        height: 100,
         decoration: BoxDecoration(
           color: lightGrey,
           borderRadius: const BorderRadius.all(Radius.circular(8))
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildResultText("subnet", "$octetOne.$octetTwo.$octetThree.$octetFour/$mask"),
-            buildResultText("devices: ", mask < 31 ? "${pow(2, 32 - mask)}(-2)" : "${pow(2, 32 - mask)}"),
-            buildResultText("wildcard", calculateSubnetMask(mask.toInt())),
-            buildResultText("class", "${identifyIPClass("$octetOne.$octetTwo.$octetThree.$octetFour")}"),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildResultText("subnet", "$octetOne.$octetTwo.$octetThree.$octetFour/$mask"),
+              buildResultText("devices: ", mask < 31 ? "${pow(2, 32 - mask)}(-2)" : "${pow(2, 32 - mask)}"),
+              buildResultText("wildcard", calculateWildcardMask(mask.toInt())),
+              //buildResultText("mask", calculateSubnetmask(mask.toInt())),
+              buildResultText("class", identifyIPClass("$octetOne.$octetTwo.$octetThree.$octetFour")),
+            ],
+          ),
         ),
       ), 
     );
@@ -73,7 +74,7 @@ Widget buildResultText(
   return Row(
     children: [
       Padding(
-        padding: const EdgeInsets.only(left: 8, top: 8),
+        padding: const EdgeInsets.only(left: 8, top: 4, bottom: 4),
         child: SizedBox(
           width: 80,
           child: Text(
@@ -86,16 +87,14 @@ Widget buildResultText(
           ),
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: Text(
-          value,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ), 
-        ),
+      Text(
+        value,
+        style: const TextStyle(
+          color: Color.fromARGB(255, 96, 96, 96),
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 1
+        ), 
       ),
     ],
   );

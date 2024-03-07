@@ -20,6 +20,32 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
   double octetFour = 0;
   double mask = 8;
 
+  Map<String, List<int>> classRanges = {
+  'A': [1, 126],
+  'B': [128, 191],
+  'C': [192, 223],
+  'D': [224, 239],
+  'E': [240, 255],
+};
+
+int randomInRange(int min, int max) {
+  final random = Random();
+  return min + random.nextInt(max - min + 1);
+}
+
+String generateRandomIP(String ipClass) {
+  final range = classRanges[ipClass];
+  if (range != null) {
+    final firstOctet = randomInRange(range[0], range[1]);
+    final octetTwo = randomInRange(0, 255);
+    final octetThree = randomInRange(0, 255);
+    final octetFour = randomInRange(0, 255);
+    return '$firstOctet.$octetTwo.$octetThree.$octetFour';
+  } else {
+    return ''; // Handle invalid class
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -94,55 +120,118 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
                 ),
               ),
             ),
-            Column(
+            Row(
               children: [
-                SubnetPresetButton(label: "192", onPressed: () {
-                  setState(() {
-                    octetOne = 192;
-                    octetTwo = 168;
-                    octetThree = 0;
-                    octetFour = 0;
-                    mask = 24;
-                  });
-                }),
-                SubnetPresetButton(label: "10", onPressed: () {
-                  setState(() {
-                    octetOne = 10;
-                    octetTwo = 0;
-                    octetThree = 0;
-                    octetFour = 0;
-                    mask = 8;
-                  });
-                }),
-                SubnetPresetButton(label: "172", onPressed: () {
-                  setState(() {
-                    octetOne = 172;
-                    octetTwo = 16;
-                    octetThree = 0;
-                    octetFour = 0;
-                    mask = 16;
-                  });
-                }),
-                SubnetPresetButton(label: "?", onPressed: () {
-                  setState(() {
-                    var random = Random();
-                    octetOne = random.nextInt(256) as double;
-                    octetTwo = random.nextInt(256) as double;
-                    octetThree = random.nextInt(256) as double;
-                    octetFour = random.nextInt(256) as double;
-                    mask = random.nextInt(33) as double;
-                  });
-                }),
-                SubnetPresetButton(label: "0", onPressed: () {
-                  setState(() {
-                    octetOne = 0;
-                    octetTwo = 0;
-                    octetThree = 0;
-                    octetFour = 0;
-                    mask = 0;
-                  });
-                }),
-
+                Column(
+                  children: [
+                    SubnetPresetButton(label: "192", onPressed: () {
+                      setState(() {
+                        octetOne = 192;
+                        octetTwo = 168;
+                        octetThree = 0;
+                        octetFour = 0;
+                        mask = 24;
+                      });
+                    }),
+                    SubnetPresetButton(label: "10", onPressed: () {
+                      setState(() {
+                        octetOne = 10;
+                        octetTwo = 0;
+                        octetThree = 0;
+                        octetFour = 0;
+                        mask = 8;
+                      });
+                    }),
+                    SubnetPresetButton(label: "172", onPressed: () {
+                      setState(() {
+                        octetOne = 172;
+                        octetTwo = 16;
+                        octetThree = 0;
+                        octetFour = 0;
+                        mask = 16;
+                      });
+                    }),
+                    SubnetPresetButton(label: "?", onPressed: () {
+                      setState(() {
+                        var random = Random();
+                        octetOne = random.nextInt(256) as double;
+                        octetTwo = random.nextInt(256) as double;
+                        octetThree = random.nextInt(256) as double;
+                        octetFour = random.nextInt(256) as double;
+                        mask = random.nextInt(33) as double;
+                      });
+                    }),
+                    SubnetPresetButton(label: "0", onPressed: () {
+                      setState(() {
+                        octetOne = 0;
+                        octetTwo = 0;
+                        octetThree = 0;
+                        octetFour = 0;
+                        mask = 0;
+                      });
+                    }),          
+                  ],
+                ),
+                Column(
+                  children: [
+                    SubnetPresetButton(label: "A", onPressed: () {
+                      setState(() {
+                        String randomIP = generateRandomIP('A');
+                        List<int> ipParts = randomIP.split('.').map(int.parse).toList();
+                        octetOne = ipParts[0] as double;
+                        octetTwo = ipParts[1] as double;
+                        octetThree = ipParts[2] as double;
+                        octetFour = ipParts[3] as double;
+                        mask = 0;
+                      });
+                    }),
+                    SubnetPresetButton(label: "B", onPressed: () {
+                      setState(() {
+                        String randomIP = generateRandomIP('B');
+                        List<int> ipParts = randomIP.split('.').map(int.parse).toList();
+                        octetOne = ipParts[0] as double;
+                        octetTwo = ipParts[1] as double;
+                        octetThree = ipParts[2] as double;
+                        octetFour = ipParts[3] as double;
+                        mask = 0;
+                      });
+                    }),
+                    SubnetPresetButton(label: "C", onPressed: () {
+                      setState(() {
+                        String randomIP = generateRandomIP('C');
+                        List<int> ipParts = randomIP.split('.').map(int.parse).toList();
+                        octetOne = ipParts[0] as double;
+                        octetTwo = ipParts[1] as double;
+                        octetThree = ipParts[2] as double;
+                        octetFour = ipParts[3] as double;
+                        mask = 0;
+                      });
+                    }),
+                    SubnetPresetButton(label: "D", onPressed: () {
+                      setState(() {
+                        String randomIP = generateRandomIP('D');
+                        List<int> ipParts = randomIP.split('.').map(int.parse).toList();
+                        octetOne = ipParts[0] as double;
+                        octetTwo = ipParts[1] as double;
+                        octetThree = ipParts[2] as double;
+                        octetFour = ipParts[3] as double;
+                        mask = 0;
+                      });
+                    }),
+                    SubnetPresetButton(label: "E", onPressed: () {
+                      setState(() {
+                        String randomIP = generateRandomIP('E');
+                        List<int> ipParts = randomIP.split('.').map(int.parse).toList();
+                        octetOne = ipParts[0] as double;
+                        octetTwo = ipParts[1] as double;
+                        octetThree = ipParts[2] as double;
+                        octetFour = ipParts[3] as double;
+                        mask = 0;
+                      });
+                    }),
+                  ],
+                ),
+     
               ],
             ),
           ],
