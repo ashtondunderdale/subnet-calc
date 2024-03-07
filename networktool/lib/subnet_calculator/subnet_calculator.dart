@@ -20,8 +20,6 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
   double octetFour = 0;
   double mask = 8;
 
-  double getOctOne() => octetOne;
-
   @override
   Widget build(BuildContext context) {
     return Column(

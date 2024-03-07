@@ -27,6 +27,18 @@ class SubnetResultBox extends StatelessWidget {
       
     return subnetMaskOctets.join('.');
   }
+    
+  String identifyIPClass(String ipAddress) {
+    int firstOctet = int.parse(ipAddress.split('.')[0]);
+
+    return (firstOctet >= 1 && firstOctet <= 126) ? 'Class A' :
+          (firstOctet == 127) ? 'Loopback' :
+          (firstOctet >= 128 && firstOctet <= 191) ? 'Class B' :
+          (firstOctet >= 192 && firstOctet <= 223) ? 'Class C' :
+          (firstOctet >= 224 && firstOctet <= 239) ? 'Class D' :
+          (firstOctet >= 240 && firstOctet <= 255) ? 'Class E' :
+          'Invalid IP Address';
+  }
 
 
   @override
@@ -46,9 +58,10 @@ class SubnetResultBox extends StatelessWidget {
             buildResultText("subnet", "$octetOne.$octetTwo.$octetThree.$octetFour/$mask"),
             buildResultText("devices: ", mask < 31 ? "${pow(2, 32 - mask)}(-2)" : "${pow(2, 32 - mask)}"),
             buildResultText("wildcard", calculateSubnetMask(mask.toInt())),
+            buildResultText("class", "${identifyIPClass("$octetOne.$octetTwo.$octetThree.$octetFour")}"),
           ],
         ),
-      ),
+      ), 
     );
   }
 }
