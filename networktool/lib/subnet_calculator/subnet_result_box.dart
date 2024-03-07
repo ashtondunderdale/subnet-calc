@@ -43,42 +43,47 @@ class SubnetResultBox extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8, top: 8),
-              child: Text(
-                "subnet: $octetOne.$octetTwo.$octetThree.$octetFour/$mask",
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8, top: 8),
-              child: Text(
-                mask < 31 ? "devices: ${pow(2, 32 - mask)}(-2)" : "devices: ${pow(2, 32 - mask)}",
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8, top: 8),
-              child: Text(
-                "wildcard: ${calculateSubnetMask(mask.toInt())}",
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            buildResultText("subnet", "$octetOne.$octetTwo.$octetThree.$octetFour/$mask"),
+            buildResultText("devices: ", mask < 31 ? "${pow(2, 32 - mask)}(-2)" : "${pow(2, 32 - mask)}"),
+            buildResultText("wildcard", calculateSubnetMask(mask.toInt())),
           ],
         ),
       ),
     );
   }
+}
+
+Widget buildResultText(
+  final String label,
+  final String value,
+) {
+  return Row(
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 8, top: 8),
+        child: SizedBox(
+          width: 80,
+          child: Text(
+            label,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ), 
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(
+          value,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ), 
+        ),
+      ),
+    ],
+  );
 }

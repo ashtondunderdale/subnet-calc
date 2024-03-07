@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../globals.dart';
+import 'subnet_preset_button.dart';
 import 'subnet_result_box.dart';
 
 class SubnetCalculator extends StatefulWidget {
@@ -11,8 +14,8 @@ class SubnetCalculator extends StatefulWidget {
 }
 
 class _SubnetCalculatorState extends State<SubnetCalculator> {
-  double octetOne = 192;
-  double octetTwo = 168;
+  double octetOne = 0;
+  double octetTwo = 0;
   double octetThree = 0;
   double octetFour = 0;
   double mask = 8;
@@ -51,45 +54,100 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8),
-            width: 600,
-            decoration: BoxDecoration(
-              color: lightGrey,
-              borderRadius: const BorderRadius.all(Radius.circular(8))
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Container(
+                padding: const EdgeInsets.only(left: 8),
+                width: 600,
+                decoration: BoxDecoration(
+                  color: lightGrey,
+                  borderRadius: const BorderRadius.all(Radius.circular(8))
+                ),
+                child: Column(
+                  children: [
+                    buildSlider(octetOne, "oct 1", (value) {
+                      setState(() {
+                        octetOne = value;
+                      });
+                    }),
+                    buildSlider(octetTwo, "oct 2", (value) {
+                      setState(() {
+                        octetTwo = value;
+                      });
+                    }),
+                    buildSlider(octetThree, "oct 3", (value) {
+                      setState(() {
+                        octetThree = value;
+                      });
+                    }),
+                    buildSlider(octetFour, "oct 4", (value) {
+                      setState(() {
+                        octetFour = value;
+                      });
+                    }),
+                    buildSlider(mask, "mask", (value) {
+                      setState(() {
+                        mask = value;
+                      });
+                    }),
+                  ],
+                ),
+              ),
             ),
-            child: Column(
+            Column(
               children: [
-                buildSlider(octetOne, "oct 1", (value) {
+                SubnetPresetButton(label: "192", onPressed: () {
                   setState(() {
-                    octetOne = value;
+                    octetOne = 192;
+                    octetTwo = 168;
+                    octetThree = 0;
+                    octetFour = 0;
+                    mask = 24;
                   });
                 }),
-                buildSlider(octetTwo, "oct 2", (value) {
+                SubnetPresetButton(label: "10", onPressed: () {
                   setState(() {
-                    octetTwo = value;
+                    octetOne = 10;
+                    octetTwo = 0;
+                    octetThree = 0;
+                    octetFour = 0;
+                    mask = 8;
                   });
                 }),
-                buildSlider(octetThree, "oct 3", (value) {
+                SubnetPresetButton(label: "172", onPressed: () {
                   setState(() {
-                    octetThree = value;
+                    octetOne = 172;
+                    octetTwo = 16;
+                    octetThree = 0;
+                    octetFour = 0;
+                    mask = 16;
                   });
                 }),
-                buildSlider(octetFour, "oct 4", (value) {
+                SubnetPresetButton(label: "?", onPressed: () {
                   setState(() {
-                    octetFour = value;
+                    var random = Random();
+                    octetOne = random.nextInt(256) as double;
+                    octetTwo = random.nextInt(256) as double;
+                    octetThree = random.nextInt(256) as double;
+                    octetFour = random.nextInt(256) as double;
+                    mask = random.nextInt(33) as double;
                   });
                 }),
-                buildSlider(mask, "mask", (value) {
+                SubnetPresetButton(label: "0", onPressed: () {
                   setState(() {
-                    mask = value;
+                    octetOne = 0;
+                    octetTwo = 0;
+                    octetThree = 0;
+                    octetFour = 0;
+                    mask = 0;
                   });
                 }),
+
               ],
             ),
-          ),
+          ],
         ),
         SubnetResultBox(octetOne: octetOne, octetTwo: octetTwo, octetThree: octetThree, octetFour: octetFour, mask: mask)
       ],
