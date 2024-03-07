@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../globals.dart';
@@ -20,31 +21,54 @@ class _SubnetCalculatorState extends State<SubnetCalculator> {
   double octetFour = 0;
   double mask = 8;
 
-  Map<String, List<int>> classRanges = {
-  'A': [1, 126],
-  'B': [128, 191],
-  'C': [192, 223],
-  'D': [224, 239],
-  'E': [240, 255],
-};
+  bool octetOneLocked = false;
+  bool octetTwoLocked = false;
+  bool octetThreeLocked = false;
+  bool octetFourLocked = false;
 
-int randomInRange(int min, int max) {
-  final random = Random();
-  return min + random.nextInt(max - min + 1);
-}
+  String generateRandomIP(String ipClass) {  
+    Map<String, List<int>> classRanges = {
+      'A': [1, 126],
+      'B': [128, 191],
+      'C': [192, 223],
+      'D': [224, 239],
+      'E': [240, 255],
+    };
 
-String generateRandomIP(String ipClass) {
-  final range = classRanges[ipClass];
-  if (range != null) {
-    final firstOctet = randomInRange(range[0], range[1]);
-    final octetTwo = randomInRange(0, 255);
-    final octetThree = randomInRange(0, 255);
-    final octetFour = randomInRange(0, 255);
-    return '$firstOctet.$octetTwo.$octetThree.$octetFour';
-  } else {
-    return ''; // Handle invalid class
+    final random = Random();
+    final range = classRanges[ipClass];
+
+    if (range != null) {
+      final firstOctet = range[0] + random.nextInt(range[1] - range[0] + 1);
+      final octetTwo = random.nextInt(256);
+      final octetThree = random.nextInt(256);
+      final octetFour = random.nextInt(256);
+
+      return '$firstOctet.$octetTwo.$octetThree.$octetFour';
+      
+    } else {
+      return '';
+    }
   }
-}
+
+  void toggleOctetLock(String octetName) {
+   setState(() {
+      switch (octetName) {
+        case "oct 1":
+          octetOneLocked = !octetOneLocked;
+          break;
+        case "oct 2":
+          octetTwoLocked = !octetTwoLocked;
+          break;
+        case "oct 3":
+          octetThreeLocked = !octetThreeLocked;
+          break;
+        case "oct 4":
+          octetFourLocked = !octetFourLocked;
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,27 +115,43 @@ String generateRandomIP(String ipClass) {
                 ),
                 child: Column(
                   children: [
-                    buildSlider(octetOne, "oct 1", (value) {
+                    buildSlider(octetOne, octetOneLocked, "oct 1", () {
                       setState(() {
-                        octetOne = value;
+                        octetOneLocked = !octetOneLocked;
+                      });
+                    }, (value) {
+                      setState(() {
+                        if (!octetOneLocked) octetOne = value;
                       });
                     }),
-                    buildSlider(octetTwo, "oct 2", (value) {
+                    buildSlider(octetTwo, octetTwoLocked, "oct 2", () {
                       setState(() {
-                        octetTwo = value;
+                        octetTwoLocked = !octetTwoLocked;
+                      });
+                    }, (value) {
+                      setState(() {
+                        if (!octetTwoLocked) octetTwo = value;
                       });
                     }),
-                    buildSlider(octetThree, "oct 3", (value) {
+                    buildSlider(octetThree, octetThreeLocked, "oct 3", () {
                       setState(() {
-                        octetThree = value;
+                        octetThreeLocked = !octetThreeLocked;
+                      });
+                    }, (value) {
+                      setState(() {
+                        if (!octetThreeLocked) octetThree = value;
                       });
                     }),
-                    buildSlider(octetFour, "oct 4", (value) {
+                    buildSlider(octetFour, octetFourLocked, "oct 4", () {
                       setState(() {
-                        octetFour = value;
+                        octetFourLocked = !octetFourLocked;
+                      });
+                    }, (value) {
+                      setState(() {
+                        if (!octetFourLocked) octetFour = value;
                       });
                     }),
-                    buildSlider(mask, "mask", (value) {
+                    buildSlider(mask, true, "mask", () {}, (value) {
                       setState(() {
                         mask = value;
                       });
@@ -133,15 +173,6 @@ String generateRandomIP(String ipClass) {
                         mask = 24;
                       });
                     }),
-                    SubnetPresetButton(label: "10", onPressed: () {
-                      setState(() {
-                        octetOne = 10;
-                        octetTwo = 0;
-                        octetThree = 0;
-                        octetFour = 0;
-                        mask = 8;
-                      });
-                    }),
                     SubnetPresetButton(label: "172", onPressed: () {
                       setState(() {
                         octetOne = 172;
@@ -149,6 +180,15 @@ String generateRandomIP(String ipClass) {
                         octetThree = 0;
                         octetFour = 0;
                         mask = 16;
+                      });
+                    }),
+                    SubnetPresetButton(label: "10", onPressed: () {
+                      setState(() {
+                        octetOne = 10;
+                        octetTwo = 0;
+                        octetThree = 0;
+                        octetFour = 0;
+                        mask = 8;
                       });
                     }),
                     SubnetPresetButton(label: "?", onPressed: () {
@@ -244,7 +284,9 @@ String generateRandomIP(String ipClass) {
 
 Widget buildSlider(
   double octet,
+  bool octetlock,
   final String title,
+  final VoidCallback onLock,
   ValueChanged<double> onChanged,
 ) {
   return Row(
@@ -267,6 +309,8 @@ Widget buildSlider(
           activeColor: const Color.fromARGB(255, 211, 211, 211),
           inactiveColor: const Color.fromARGB(255, 221, 221, 221),
           thumbColor: const Color.fromARGB(255, 255, 255, 255),
+          secondaryTrackValue: title == "mask" ? 16 : 127,
+          secondaryActiveColor: const Color.fromARGB(255, 207, 207, 207),
           label: octet.toString(),
           max: title == "mask" ? 32 : 255,
           divisions: title == "mask" ? 32 : 255,
@@ -274,6 +318,14 @@ Widget buildSlider(
           onChanged: onChanged,
         ),
       ),
+      IconButton(
+        onPressed: () {
+          onLock();
+        }, 
+        icon: Icon(
+          octetlock ? Icons.lock : Icons.lock_open
+        )
+      )
     ],
   );
 }

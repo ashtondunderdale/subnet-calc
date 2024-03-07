@@ -23,20 +23,20 @@ class SubnetResultBox extends StatelessWidget {
       return octetValue;
     }).join('.');
   }
-  
-String identifyIPClass(String ipAddress) {
-  int firstOctet = int.parse(ipAddress.split('.')[0]);
+    
+  String identifyIPClass(String ipAddress) {
+    int firstOctet = int.parse(ipAddress.split('.')[0]);
 
-  if (firstOctet == 0) return 'default route';
+    if (firstOctet == 0) return 'default route';
 
-  return (firstOctet >= 1 && firstOctet <= 126)   ? 'Class A' :
-         (firstOctet == 127)                      ? 'Loopback address' :
-         (firstOctet >= 128 && firstOctet <= 191) ? 'Class B' :
-         (firstOctet >= 192 && firstOctet <= 223) ? 'Class C' :
-         (firstOctet >= 224 && firstOctet <= 239) ? 'Class D (multicast)' :
-         (firstOctet >= 240 && firstOctet <= 255) ? 'Class E (experimental)' :
-         'Invalid IP Address';
-}
+    return (firstOctet >= 1 && firstOctet <= 126)   ? 'Class A' :
+           (firstOctet == 127)                      ? 'Loopback address' :
+           (firstOctet >= 128 && firstOctet <= 191) ? 'Class B' :
+           (firstOctet >= 192 && firstOctet <= 223) ? 'Class C' :
+           (firstOctet >= 224 && firstOctet <= 239) ? 'Class D (multicast)' :
+           (firstOctet >= 240 && firstOctet <= 255) ? 'Class E (experimental)' :
+                                                      'Invalid IP Address';
+  }
 
 
   @override
